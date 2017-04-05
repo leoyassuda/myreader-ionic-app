@@ -1,8 +1,9 @@
-import {Component} from '@angular/core';
-import {NavController, LoadingController, ActionSheetController} from 'ionic-angular';
+import {Component, ViewChild } from '@angular/core';
+import {NavController, LoadingController, ActionSheetController, Content} from 'ionic-angular';
 import {Http} from '@angular/http';
 import 'rxjs/add/operator/map'
 import {InAppBrowser} from 'ionic-native';
+import { RedditService } from '../../providers/reddit-service';
 
 @Component({
   selector: 'page-home',
@@ -18,12 +19,18 @@ export class HomePage {
 
   public hasFilter: boolean = false;
   public noFilter: Array<any>;
+  public searchTerm: string = "";
 
-  constructor(public navCtrl: NavController, public http: Http, public loadingController: LoadingController, public actionSheetController: ActionSheetController) {
+   @ViewChild(Content) content: Content;
 
+  constructor(public navCtrl: NavController, public http: Http, public loadingController: LoadingController, 
+    public actionSheetController: ActionSheetController, public redditService: RedditService) {
+    
     this.fetchContent();
 
   }
+
+  /*constructor(public redditService: redditService) {}*/
 
 
   fetchContent(): void {
@@ -33,22 +40,12 @@ export class HomePage {
 
     loading.present();
 
-    this.http.get(this.url).map(res => res.json())
-      .subscribe(data => {
-
-        this.feeds = data.data.children;
-
-        this.feeds.forEach((e, i, a) => {
-          if (!e.data.thumbnail || e.data.thumbnail.indexOf('b.thumbs.redditmedia.com') === -1) {
-            e.data.thumbnail = 'http://www.redditstatic.com/icon.png';
-          }
-        });
-
-        this.noFilter = this.feeds;
-
-        loading.dismiss();
-
-      });
+    this.redditService.fetchData(this.url).then(data => {
+      this.feeds = data;
+      this.noFilter = this.feeds;
+      loading.dismiss();
+    })
+    
   }
 
   itemSelected(url: string): void {
@@ -100,6 +97,9 @@ export class HomePage {
   }
 
   showFilters(): void {
+
+    this.content.scrollToTop();
+
     let actionSheet = this.actionSheetController.create({
       title: 'Opções de filtro:',
       buttons: [
@@ -132,7 +132,7 @@ export class HomePage {
           }
         },
         {
-          text: 'Cancelar',
+          text: 'Limpar',
           role: 'cancel',
           handler: () => {
             this.feeds = this.noFilter;
@@ -144,6 +144,13 @@ export class HomePage {
 
     actionSheet.present();
 
+  }
+
+   filterItems() {
+    this.hasFilter = false;
+    this.feeds = this.noFilter.filter((item) => {
+        return item.data.title.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
+    });
   }
 
 }

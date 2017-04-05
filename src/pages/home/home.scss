@@ -1,3 +1,12 @@
 page-home {
 
+	// iOS only
+  	.toolbar-ios { 
+    	ion-title {
+        	padding: 0 90px 0 1px;  
+      	} 
+    .searchbar-ios .searchbar-input {
+    	background: rgba($color: #000, $alpha: 0.12);            
+  	}
+  }
 }

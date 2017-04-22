@@ -16,8 +16,21 @@ export class MyApp {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+
+      //splashScreen.hide();
+
+      let env = this;
+      NavigateSorage.getItem('user')
+        .then(function (data) {
+          env.nav.push(UserPage);
+          SplashScreen.hide();
+        },
+        function (error) {
+          env.nav.push(LoginPage);
+          SplashScreen.hide();
+      });
+
       statusBar.styleDefault();
-      splashScreen.hide();
 
       this.push.register().then((t: PushToken) => {
         return this.push.saveToken(t);

@@ -1,12 +1,13 @@
-import {Component} from '@angular/core';
-import {Platform} from 'ionic-angular';
-import {StatusBar} from '@ionic-native/status-bar';
-import {SplashScreen} from '@ionic-native/splash-screen';
-
-import {HomePage} from '../pages/home/home';
-import {Push, PushToken} from '@ionic/cloud-angular';
-import {NativeStorage} from "ionic-native";
-import {LoginPage} from "../pages/login/login";
+import { Component } from "@angular/core";
+import { NavController, Platform } from "ionic-angular";
+import { StatusBar } from "@ionic-native/status-bar";
+import { SplashScreen } from "@ionic-native/splash-screen";
+import { Push, PushToken } from "@ionic/cloud-angular";
+import { HomePage } from "../pages/home/home";
+import { LoginPage } from "../pages/login/login";
+import { UserPage } from "../pages/user/user";
+import { NativeStorage } from "@ionic-native/native-storage";
+import firebase from 'firebase'
 
 @Component({
   templateUrl: 'app.html'
@@ -14,20 +15,26 @@ import {LoginPage} from "../pages/login/login";
 export class MyApp {
   rootPage: any = HomePage;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public push: Push) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public push: Push,
+    public nativeStorage: NativeStorage, public navController: NavController) {
+
+    firebase.initializeApp({
+      apiKey: "",
+      authDomain: "",
+      databaseURL: "",
+      storageBucket: "",
+      messagingSenderId: ""
+    });
+
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
 
-      //splashScreen.hide();
-
-      NativeStorage.getItem('user')
+      this.nativeStorage.getItem('user')
         .then(function (data) {
-            this.nav.push(UserPage);
+            navController.push(UserPage);
             splashScreen.hide();
           },
           function (error) {
-            this.nav.push(LoginPage);
+            navController.push(LoginPage);
             splashScreen.hide();
           });
 

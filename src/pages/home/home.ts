@@ -1,8 +1,8 @@
-import {Component, ViewChild } from '@angular/core';
-import {NavController, LoadingController, ActionSheetController, Content} from 'ionic-angular';
-import {Http} from '@angular/http';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, LoadingController, ActionSheetController, Content } from 'ionic-angular';
+import { Http } from '@angular/http';
 import 'rxjs/add/operator/map'
-import {InAppBrowser} from 'ionic-native';
+import { InAppBrowser } from 'ionic-native';
 import { RedditService } from '../../providers/reddit-service';
 
 @Component({
@@ -21,11 +21,11 @@ export class HomePage {
   public noFilter: Array<any>;
   public searchTerm: string = "";
 
-   @ViewChild(Content) content: Content;
+  @ViewChild(Content) content: Content;
 
-  constructor(public navCtrl: NavController, public http: Http, public loadingController: LoadingController, 
-    public actionSheetController: ActionSheetController, public redditService: RedditService) {
-    
+  constructor(public navCtrl: NavController, public http: Http, public loadingController: LoadingController,
+              public actionSheetController: ActionSheetController, public redditService: RedditService) {
+
     this.fetchContent();
 
   }
@@ -45,7 +45,7 @@ export class HomePage {
       this.noFilter = this.feeds;
       loading.dismiss();
     })
-    
+
   }
 
   itemSelected(url: string): void {
@@ -146,10 +146,10 @@ export class HomePage {
 
   }
 
-   filterItems() {
+  filterItems() {
     this.hasFilter = false;
     this.feeds = this.noFilter.filter((item) => {
-        return item.data.title.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
+      return item.data.title.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1;
     });
   }
 

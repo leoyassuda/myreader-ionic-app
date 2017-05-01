@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
 import { NativeStorage } from "@ionic-native/native-storage";
 import { Facebook } from '@ionic-native/facebook';
 import { UserPage } from '../user/user';
@@ -12,8 +11,7 @@ export class LoginPage {
 
   FB_APP_ID: number = 401399156898848;
 
-  constructor(private fb: Facebook, public navController: NavController, public navParams: NavParams,
-              public nativeStorage: NativeStorage) {
+  constructor(private fb: Facebook, public nativeStorage: NativeStorage) {
     fb.browserInit(this.FB_APP_ID, "v2.8");
   }
 

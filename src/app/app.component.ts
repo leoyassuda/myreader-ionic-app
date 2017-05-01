@@ -4,9 +4,6 @@ import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { Push, PushToken } from "@ionic/cloud-angular";
 import { HomePage } from "../pages/home/home";
-import { LoginPage } from "../pages/login/login";
-import { UserPage } from "../pages/user/user";
-import { NativeStorage } from "@ionic-native/native-storage";
 import firebase from 'firebase'
 
 @Component({
@@ -16,10 +13,11 @@ export class MyApp {
   rootPage: any = HomePage;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public push: Push,
-    public nativeStorage: NativeStorage, public navController: NavController) {
+    navController: NavController) {
 
+    //https://my-reader-app.firebaseapp.com/__/auth/handler
     firebase.initializeApp({
-      apiKey: "",
+      apiKey: "AIzaSyAz43ZmWowYCIunfEYm7s6A1Xvg6F9EAhU",
       authDomain: "",
       databaseURL: "",
       storageBucket: "",
@@ -28,15 +26,15 @@ export class MyApp {
 
     platform.ready().then(() => {
 
-      this.nativeStorage.getItem('user')
-        .then(function (data) {
-            navController.push(UserPage);
-            splashScreen.hide();
-          },
-          function (error) {
-            navController.push(LoginPage);
-            splashScreen.hide();
-          });
+      // this.nativeStorage.getItem('user')
+      //   .then(function (data) {
+      //       navController.push(UserPage);
+      //       splashScreen.hide();
+      //     },
+      //     function (error) {
+      //       navController.push(LoginPage);
+      //       splashScreen.hide();
+      //     });
 
       statusBar.styleDefault();
 
@@ -50,6 +48,8 @@ export class MyApp {
         .subscribe((msg) => {
           console.log('Eu recebi uma notificação push: ' + msg);
         });
+
+      splashScreen.hide();
 
     });
   }

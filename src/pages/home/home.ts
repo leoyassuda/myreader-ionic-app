@@ -1,9 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, LoadingController, ActionSheetController, Content } from 'ionic-angular';
+import { LoadingController, ActionSheetController, Content } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map'
 import { InAppBrowser } from 'ionic-native';
 import { RedditService } from '../../providers/reddit-service';
+import { Facebook } from '@ionic-native/facebook';
+import firebase from 'firebase';
 
 @Component({
   selector: 'page-home',
@@ -23,15 +25,30 @@ export class HomePage {
 
   @ViewChild(Content) content: Content;
 
-  constructor(public navCtrl: NavController, public http: Http, public loadingController: LoadingController,
-              public actionSheetController: ActionSheetController, public redditService: RedditService) {
+  userProfile: any = null;
+
+  constructor(public http: Http, public loadingController: LoadingController,
+              public actionSheetController: ActionSheetController, public redditService: RedditService,
+  private facebook: Facebook) {
 
     this.fetchContent();
 
   }
 
-  /*constructor(public redditService: redditService) {}*/
-
+  facebookLogin(): void {
+    this.facebook.login(['login']).then((response) => {
+      const facebookCredential = firebase.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
+      firebase.auth().signInWithCredential(facebookCredential).then((success) => {
+        console.log("Firebase success: " + JSON.stringify(success));
+        this.userProfile = success;
+      })
+        .catch((error) => {
+        console.log("Firebase failure: " + JSON.stringify(error));
+        });
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
 
   fetchContent(): void {
     let loading = this.loadingController.create({

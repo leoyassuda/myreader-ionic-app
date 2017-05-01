@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavParams } from 'ionic-angular';
 import { Facebook } from '@ionic-native/facebook';
 import { NativeStorage } from "@ionic-native/native-storage";
 import { LoginPage } from '../login/login'
@@ -14,7 +14,7 @@ export class UserPage {
   user: any;
   userReady: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private nativeStorage: NativeStorage,
+  constructor(public navParams: NavParams, private nativeStorage: NativeStorage,
     private fb: Facebook) {
   }
 
@@ -35,14 +35,14 @@ export class UserPage {
   }
 
   doFbLogout(){
-    let nav = this.navCtrl;
-    this.fb.logout()
-      .then(function (response) {
-        this.nativeStorage.remove('user');
-        nav.push(LoginPage);
-      }, function (error) {
-        console.log(error);
-      });
+    // let nav = this.navCtrl;
+    // this.fb.logout()
+    //   .then(function (response) {
+    //     this.nativeStorage.remove('user');
+    //     nav.push(LoginPage);
+    //   }, function (error) {
+    //     console.log(error);
+    //   });
   }
 
 }
